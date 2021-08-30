@@ -3,7 +3,7 @@ from collections import namedtuple
 
 Database = namedtuple(
     "Database",
-    "host port user password database prefix"
+    "host port user password database"
 )
 
 Metadata = namedtuple(
