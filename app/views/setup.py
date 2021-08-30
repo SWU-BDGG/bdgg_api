@@ -1,5 +1,6 @@
 
 from flask import Blueprint
+from flask import render_template
 
 
 bp = Blueprint(
@@ -11,4 +12,13 @@ bp = Blueprint(
 
 @bp.get("/step1")
 def step1():
-    return "TODO"
+    return render_template(
+        "setup/step1.html"
+    )
+
+
+@bp.get("/step2")
+def step2():
+    return render_template(
+        "setup/step2.html"
+    )
