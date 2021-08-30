@@ -27,6 +27,9 @@ bp.register_blueprint(dashboard.bp)
 
 @bp.get("/login")
 def login():
+    if "user" in session.keys():
+        return redirect(url_for("user.dashboard.index"))
+
     return render_template(
         "user/login.html"
     )
