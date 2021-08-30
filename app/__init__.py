@@ -2,11 +2,15 @@ from os import path
 from os import mkdir
 
 from flask import Flask
+from flask import request
+from flask import redirect
+from flask import url_for
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from app.config import test_config
 from app.secret_key import SECRET_KEY
+from app.database import get_url
 
 
 db = SQLAlchemy()
@@ -32,7 +36,7 @@ def create_app():
     app.config['SECRET_KEY'] = SECRET_KEY
 
     # sqlite for dev
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.sqlite"
+    app.config['SQLALCHEMY_DATABASE_URI'] = get_url()
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     __import__("app.models")
@@ -42,5 +46,11 @@ def create_app():
     from . import views
     for view in views.__all__:
         app.register_blueprint(blueprint=getattr(getattr(views, view), "bp"))
+
+    @app.before_request
+    def check_database():
+        if not request.path.startswith("/setup"):
+            if app.config['SQLALCHEMY_DATABASE_URI'] == "#":
+                return redirect(url_for("setup.step1"))
 
     return app
