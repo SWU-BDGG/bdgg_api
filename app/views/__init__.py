@@ -2,6 +2,7 @@ __all__ = [
     "api",
     "download",
     "file",
+    "setup",
     "upload",
     "user",
 ]
