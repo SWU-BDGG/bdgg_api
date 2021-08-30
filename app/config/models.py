@@ -6,11 +6,6 @@ Database = namedtuple(
     "host port user password database"
 )
 
-Metadata = namedtuple(
-    "Metadata",
-    "title"
-)
-
 
 ##############################################
 del namedtuple
