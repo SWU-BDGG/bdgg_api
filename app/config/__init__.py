@@ -61,6 +61,7 @@ def update_config(model_name: str, model: object) -> bool:
     filename = model_name.lower() + ".ini"
 
     config = ConfigParser()
+    config.add_section(model_name)
 
     for field in getattr(getattr(models, model_name), "_fields"):
         config.set(
