@@ -4,6 +4,44 @@ from sqlalchemy import func
 from app import db
 
 
+class Login(db.Model):
+    idx = db.Column(
+        db.Integer,
+        unique=True,
+        primary_key=True,
+        nullable=False
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    user_agent = db.Column(
+        db.String(500),
+        nullable=False
+    )
+
+    token = db.Column(
+        db.String(128),
+        nullable=False
+    )
+
+    date = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=func.now()
+    )
+
+    expired = db.Column(
+        db.DateTime,
+        nullable=False,
+    )
+
+    def __repr__(self):
+        return f"<Login idx={self.idx}, user_id={self.user_id}>"
+
+
 class User(db.Model):
     idx = db.Column(
         db.Integer,
