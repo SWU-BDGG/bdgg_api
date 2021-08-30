@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 from app.config import test_config
+from app.secret_key import SECRET_KEY
 
 
 db = SQLAlchemy()
@@ -26,6 +27,9 @@ def create_app():
 
     # >_<
     app = Flask(__name__)
+
+    # session SECRET_KEY!
+    app.config['SECRET_KEY'] = SECRET_KEY
 
     # sqlite for dev
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.sqlite"
