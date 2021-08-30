@@ -5,9 +5,6 @@ flask-migrate
 # mysqlclient for production environment
 mysqlclient
 
-# jwt for authentication
-pyjwt
-
 # gunicorn for production environment
 gunicorn
 gevent
