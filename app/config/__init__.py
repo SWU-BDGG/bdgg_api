@@ -28,7 +28,7 @@ def test_config() -> None:
                 reset.write(configInit)
 
 
-def get_config(model_name: str) -> object:
+def get_config(model_name: str):
     from app import BASE_DIR
 
     if model_name not in models.__all__:
