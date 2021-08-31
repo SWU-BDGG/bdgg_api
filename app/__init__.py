@@ -2,6 +2,7 @@ from os import path
 from os import mkdir
 
 from flask import Flask
+from flask import session
 from flask import request
 from flask import redirect
 from flask import url_for
@@ -48,9 +49,13 @@ def create_app():
         app.register_blueprint(blueprint=getattr(getattr(views, view), "bp"))
 
     @app.before_request
-    def check_database():
-        if not request.path.startswith("/setup"):
-            if app.config['SQLALCHEMY_DATABASE_URI'] == "#":
+    def check_database_and_login():
+        if app.config['SQLALCHEMY_DATABASE_URI'] == "#":
+            if not request.path.startswith("/static") and not request.path.startswith("/setup"):
                 return redirect(url_for("setup.step1"))
+        else:
+            if "user" not in session.keys():
+                if not request.path.startswith("/api") and not request.path.startswith("/user/login"):
+                    return redirect(url_for("user.login"))
 
     return app

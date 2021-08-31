@@ -50,6 +50,7 @@ def step1_post():
 
     update_config("Database", database)
     session['setup_step2'] = True
+    session['user'] = "temp_login"
 
     return redirect(url_for("setup.step2"))
 
@@ -92,4 +93,5 @@ def step2_post():
     db.session.commit()
 
     del session['setup_step2']
+    del session['user']
     return redirect("/")
