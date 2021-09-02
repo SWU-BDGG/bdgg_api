@@ -25,6 +25,15 @@ bp = Blueprint(
 bp.register_blueprint(dashboard.bp)
 
 
+@bp.get("")
+@bp.get("/")
+def auto_redirect():
+    if "user" in session.keys():
+        return redirect(url_for("user.dashboard.index"))
+
+    return redirect(url_for("user.login"))
+
+
 @bp.get("/logout")
 def logout():
     for key in list(session.keys()):
