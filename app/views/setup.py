@@ -30,6 +30,9 @@ def moveto():
 
 @bp.get("/step1")
 def step1():
+    if get_url() != "#":
+        return "데이터베이스 접속 정보가 이미 설정되어있습니다."
+
     return render_template(
         "setup/step1.html"
     )
@@ -84,6 +87,9 @@ def step2_post():
 
     if len(password) < 8:
         return redirect(url_for("setup.step2"))
+
+    if User.query.first() is not None:
+        return "이미 관리자 유저가 생성되어있습니다."
 
     user = User()
     user.email = email[:128]
