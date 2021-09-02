@@ -51,11 +51,26 @@ def create_app():
     @app.before_request
     def check_database_and_login():
         if app.config['SQLALCHEMY_DATABASE_URI'] == "#":
-            if not request.path.startswith("/static") and not request.path.startswith("/setup"):
+            flags = [
+                x for x in [
+                    "/static",
+                    "/setup",
+                ] if request.path.startswith(x)
+            ]
+
+            if len(flags) == 0:
                 return redirect(url_for("setup.step1"))
         else:
-            if "user" not in session.keys():
-                if not request.path.startswith("/api") and not request.path.startswith("/user/login"):
+            flags = [
+                x for x in [
+                    "/api",
+                    "/static",
+                    "/user/login",
+                ] if request.path.startswith(x)
+            ]
+
+            if len(flags) == 0:
+                if "user" not in session.keys():
                     return redirect(url_for("user.login"))
 
     return app
