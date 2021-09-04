@@ -36,7 +36,6 @@ def create_app():
     # session SECRET_KEY!
     app.config['SECRET_KEY'] = SECRET_KEY
 
-    # sqlite for dev
     app.config['SQLALCHEMY_DATABASE_URI'] = get_url()
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
