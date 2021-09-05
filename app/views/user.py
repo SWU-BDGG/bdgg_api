@@ -80,7 +80,7 @@ def login_post():
     db.session.commit()
 
     session['user'] = {
-        "idx": user.id,
+        "id": user.id,
         "token": ls.token
     }
 
