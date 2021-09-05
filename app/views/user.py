@@ -71,7 +71,7 @@ def login_post():
         return redirect(url_for("user.login", err="user_not_found"))
 
     ls = Login()
-    ls.user_id = user.idx
+    ls.user_id = user.id
     ls.user_agent = request.user_agent
     ls.token = token_bytes(64).hex()
     ls.expired = datetime.now() + timedelta(hours=6)
@@ -80,7 +80,7 @@ def login_post():
     db.session.commit()
 
     session['user'] = {
-        "idx": user.idx,
+        "idx": user.id,
         "token": ls.token
     }
 
