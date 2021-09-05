@@ -47,6 +47,10 @@ def create_app():
     for view in views.__all__:
         app.register_blueprint(blueprint=getattr(getattr(views, view), "bp"))
 
+    from . import template_filter
+    for filter_name in template_filter.filter_list:
+        app.add_template_filter(f=getattr(template_filter, filter_name), name=filter_name)
+
     @app.before_request
     def check_database_and_login():
         if app.config['SQLALCHEMY_DATABASE_URI'] == "#":

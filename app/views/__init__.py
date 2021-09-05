@@ -1,4 +1,5 @@
 __all__ = [
+    "admin",
     "api",
     "download",
     "file",
