@@ -67,10 +67,10 @@ class User(db.Model):
         default=func.now()
     )
 
-    scope = db.Column(
-        db.String(64),
+    is_admin = db.Column(
+        db.Boolean,
         nullable=False,
-        default="user-upload-download-search"
+        default=False
     )
 
     def __repr__(self):

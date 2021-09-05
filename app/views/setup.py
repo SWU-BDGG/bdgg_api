@@ -94,6 +94,7 @@ def step2_post():
     user = User()
     user.email = email[:128]
     user.password = sha512(password.encode()).hexdigest()
+    user.is_admin = True
 
     db.session.add(user)
     db.session.commit()
