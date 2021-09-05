@@ -34,24 +34,24 @@ def upgrade():
     sa.UniqueConstraint('uuid')
     )
     op.create_table('login',
-    sa.Column('idx', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('user_agent', sa.String(length=500), nullable=False),
     sa.Column('token', sa.String(length=128), nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('expired', sa.DateTime(), nullable=False),
-    sa.PrimaryKeyConstraint('idx'),
-    sa.UniqueConstraint('idx')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('id')
     )
     op.create_table('user',
-    sa.Column('idx', sa.Integer(), nullable=False),
+    sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=128), nullable=False),
     sa.Column('password', sa.String(length=128), nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('is_admin', sa.Boolean(), nullable=False),
-    sa.PrimaryKeyConstraint('idx'),
+    sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
-    sa.UniqueConstraint('idx')
+    sa.UniqueConstraint('id')
     )
     # ### end Alembic commands ###
 

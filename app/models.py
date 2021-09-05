@@ -5,7 +5,7 @@ from app import db
 
 
 class Login(db.Model):
-    idx = db.Column(
+    id = db.Column(
         db.Integer,
         unique=True,
         primary_key=True,
@@ -43,7 +43,7 @@ class Login(db.Model):
 
 
 class User(db.Model):
-    idx = db.Column(
+    id = db.Column(
         db.Integer,
         unique=True,
         primary_key=True,
