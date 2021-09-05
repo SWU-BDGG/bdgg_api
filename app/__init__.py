@@ -2,6 +2,7 @@ from os import path
 from os import mkdir
 
 from flask import Flask
+from flask import g
 from flask import session
 from flask import request
 from flask import redirect
@@ -75,5 +76,15 @@ def create_app():
             if len(flags) == 0:
                 if "user" not in session.keys():
                     return redirect(url_for("user.login"))
+
+        if "user" in session.keys():
+            from app.models import User
+
+            user = User.query.filter_by(
+                id=session['user']['id']
+            ).first()
+
+            g.email = user.email
+            g.is_admin = user.is_admin
 
     return app
