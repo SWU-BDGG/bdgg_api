@@ -84,6 +84,7 @@ def create_app():
                 id=session['user']['id']
             ).first()
 
+            g.name = user.email.split("@")[0]
             g.email = user.email
             g.is_admin = user.is_admin
 
