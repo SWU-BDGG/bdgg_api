@@ -110,3 +110,17 @@ def register_post():
     db.session.commit()
 
     return redirect(url_for("admin.user_list"))
+
+
+@bp.get("/delete/<int:user_id>")
+def delete(user_id: int):
+    if not check_admin():
+        return redirect(url_for("user.dashboard.index"))
+
+    User.query.filter_by(
+        id=user_id
+    ).delete()
+
+    db.session.commit()
+
+    return redirect(url_for("admin.user_list"))
