@@ -70,6 +70,7 @@ def create_app():
                     "/api",
                     "/static",
                     "/user/login",
+                    "/setup/server-restart",
                 ] if request.path.startswith(x)
             ]
 
@@ -77,7 +78,7 @@ def create_app():
                 if "user" not in session.keys():
                     return redirect(url_for("user.login"))
 
-        if "user" in session.keys():
+        if "user" in session.keys() and isinstance(session['user'], dict):
             from app.models import User
 
             user = User.query.filter_by(

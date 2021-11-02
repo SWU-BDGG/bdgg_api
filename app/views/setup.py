@@ -7,6 +7,8 @@ from flask import redirect
 from flask import url_for
 from flask import current_app
 from flask import render_template
+from flask_migrate import upgrade
+from sqlalchemy.exc import ProgrammingError
 
 from app import db
 from app.models import User
@@ -88,8 +90,14 @@ def step2_post():
     if len(password) < 8:
         return redirect(url_for("setup.step2"))
 
-    if User.query.first() is not None:
-        return "이미 관리자 유저가 생성되어있습니다."
+    sv_restart_req = False
+
+    try:
+        if User.query.first() is not None:
+            return "이미 관리자 유저가 생성되어있습니다."
+    except ProgrammingError:
+        upgrade()
+        sv_restart_req = True
 
     user = User()
     user.email = email[:128]
@@ -101,4 +109,19 @@ def step2_post():
 
     del session['setup_step2']
     del session['user']
+
+    if sv_restart_req:
+        session['sv_restart_req'] = True
+        return redirect(url_for(".plz_server_restart"))
+
     return redirect("/")
+
+
+@bp.get("/server-restart")
+def plz_server_restart():
+    if session['sv_restart_req']:
+        del session['sv_restart_req']
+    else:
+        return redirect("/")
+
+    return "데이터베이스 설정이 변경되어 서버 재시작이 필요합니다."
