@@ -72,6 +72,9 @@ def user_edit_post(user_id: int):
     if len(password) >= 8:
         user.password = sha512(password.encode()).hexdigest()
 
+    if user.id == 1:
+        user.is_admin = True
+
     db.session.commit()
 
     return redirect(url_for("admin.user_list"))
