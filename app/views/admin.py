@@ -92,4 +92,18 @@ def register_post():
     if not check_admin():
         return redirect(url_for("user.dashboard.index"))
 
-    return redirect(url_for("admin.user_edit", user_id=1))
+    email = request.form.get("email")
+    password = request.form.get("password")
+
+    if len(email) == 0 or len(password) < 8:
+        return redirect(url_for("admin.register"))
+
+    user = User()
+    user.email = email[:128]
+    user.password = sha512(password.encode()).hexdigest()
+    user.is_admin = False
+
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect(url_for("admin.user_list"))
