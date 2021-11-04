@@ -49,6 +49,8 @@ sqlalchemy==1.4.23
     # via
     #   alembic
     #   flask-sqlalchemy
+ua-parser==0.10.0
+    # via -r requirements.in
 werkzeug==2.0.1
     # via flask
 zope.event==4.5.0
