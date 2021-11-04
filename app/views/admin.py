@@ -8,6 +8,7 @@ from flask import render_template
 
 from app import db
 from app.models import User
+from app.models import Login
 from app.check import check_admin
 
 
@@ -42,9 +43,14 @@ def user_edit(user_id: int):
     if user is None:
         return redirect(url_for("admin.user_list"))
 
+    logins = Login.query.filter_by(
+        user_id=user.id
+    ).all()
+
     return render_template(
         "admin/edit.html",
-        user=user
+        user=user,
+        logins=logins
     )
 
 

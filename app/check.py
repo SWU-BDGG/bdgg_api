@@ -12,7 +12,7 @@ def clear_session() -> None:
         del session[key]
 
 
-def check_login() -> bool:
+def check_login(bool_instead: bool = False) -> bool or User:
     session_user = session.get("user", {})
     user_id = session_user.get("id")
     token = session_user.get("token")
@@ -44,6 +44,9 @@ def check_login() -> bool:
 
         clear_session()
         return False
+
+    if bool_instead:
+        return user
 
     return True
 

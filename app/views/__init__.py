@@ -3,6 +3,7 @@ __all__ = [
     "api",
     "download",
     "file",
+    "session",
     "setup",
     "upload",
     "user",
