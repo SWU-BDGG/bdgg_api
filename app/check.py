@@ -2,7 +2,6 @@ from datetime import datetime
 
 from flask import session
 
-from app import db
 from app.models import User
 from app.models import Login
 
@@ -39,9 +38,6 @@ def check_login(bool_instead: bool = False) -> bool or User:
         return False
 
     if login.expired < datetime.now():
-        db.session.delete(login)
-        db.session.commit()
-
         clear_session()
         return False
 
