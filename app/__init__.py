@@ -52,6 +52,10 @@ def create_app():
     for filter_name in template_filter.filter_list:
         app.add_template_filter(f=getattr(template_filter, filter_name), name=filter_name)
 
+    from .error import error_map
+    for code, func in error_map.items():
+        app.register_error_handler(code, f=func.html)
+
     @app.before_request
     def check_database_and_login():
         if app.config['SQLALCHEMY_DATABASE_URI'] == "#":
@@ -88,5 +92,8 @@ def create_app():
             g.name = user.email.split("@")[0]
             g.email = user.email
             g.is_admin = user.is_admin
+            g.is_login = True
+        else:
+            g.is_login = False
 
     return app
