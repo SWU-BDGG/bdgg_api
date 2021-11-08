@@ -37,3 +37,16 @@ def remove(session_id: int):
         back_to = url_for("user.dashboard.index")
 
     return redirect(back_to)
+
+
+@bp.get("/remove/all")
+def remove_all():
+    user = check_login(bool_instead=True)
+
+    if not isinstance(user, bool):
+        Login.query.filter_by(
+            user_id=user.id
+        ).delete()
+        db.session.commit()
+
+    return redirect(url_for("user.logout"))
