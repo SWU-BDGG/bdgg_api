@@ -1,9 +1,16 @@
+from re import compile
 from datetime import datetime
 
 from flask import session
 
 from app.models import User
 from app.models import Login
+
+
+def check_filename(filename: str) -> str:
+    # regex from `werkzeug.utils.secure_filename`
+    pattern = compile(r"[^A-Za-z0-9가-힣_.-]")
+    return str(pattern.sub("", "_".join(filename.split())).strip("._"))
 
 
 def clear_session() -> None:
