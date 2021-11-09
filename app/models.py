@@ -102,6 +102,14 @@ class File(db.Model):
         default=func.now()
     )
 
+    md5 = db.Column(
+        db.String(32)
+    )
+
+    sha256 = db.Column(
+        db.String(64)
+    )
+
     def __repr__(self):
         return f"<File uuid={self.uuid!r}>"
 
