@@ -1,5 +1,6 @@
 
 from flask import Blueprint
+from flask import request
 from flask import Response
 from flask import render_template
 
@@ -17,7 +18,38 @@ bp = Blueprint(
 
 @bp.get("")
 def index():
-    return "file.index"
+    try:
+        page = int(request.args.get("page", "1"))
+
+        if page <= 0:
+            page = 1
+    except ValueError:
+        page = 1
+
+    files = File.query.order_by(
+        File.date.desc()
+    ).paginate(page)
+
+    pages = []
+
+    if files.page < 3:
+        for i in range(1, files.pages + 1):
+            if len(pages) == 5:
+                break
+
+            pages.append(i)
+    else:
+        for i in range(files.page - 2, files.pages + 1):
+            if len(pages) == 5:
+                break
+
+            pages.append(i)
+
+    return render_template(
+        "file/list.html",
+        files=files,
+        pages=pages
+    )
 
 
 @bp.get("/search")
