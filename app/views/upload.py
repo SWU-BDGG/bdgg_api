@@ -1,5 +1,6 @@
 
 from flask import Blueprint
+from flask import render_template
 
 
 bp = Blueprint(
@@ -11,7 +12,9 @@ bp = Blueprint(
 
 @bp.get("")
 def form():
-    return "form.html"
+    return render_template(
+        "upload/form.html"
+    )
 
 
 @bp.post("")
