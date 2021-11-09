@@ -43,6 +43,7 @@ def login():
 
     if user is None:
         return on_error(
+            api_version=API_VERSION,
             message="fail to search user in database",
             code="api_login_fail_not_found"
         ), 404
@@ -72,4 +73,17 @@ def login():
 
 @bp.get("/key")
 def key():
+    return jsonify({"status": "on dev"})
+
+
+@bp.get("/download")
+def download():
+    auth = request.headers.get("authorization", default="undefined undefined")
+    bearer, token = auth.split(" ")
+
+    if bearer.lower() != "bearer":
+        return on_error(
+            message="",
+        )
+
     return jsonify({"status": "on dev"})
