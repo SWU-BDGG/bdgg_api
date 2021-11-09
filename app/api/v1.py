@@ -8,6 +8,7 @@ from flask import request
 from flask import jsonify
 
 from app import db
+from app.models import File
 from app.models import User
 from app.models import Login
 from .resp import on_error
@@ -73,17 +74,90 @@ def login():
 
 @bp.get("/key")
 def key():
-    return jsonify({"status": "on dev"})
-
-
-@bp.get("/download")
-def download():
     auth = request.headers.get("authorization", default="undefined undefined")
     bearer, token = auth.split(" ")
 
     if bearer.lower() != "bearer":
         return on_error(
-            message="",
-        )
+            api_version=API_VERSION,
+            message="this api requires `Bearer` token",
+            data={
+                "ex": "Authorization: Bearer {YOUR_TOKEN}"
+            },
+            code="required_authorization"
+        ), 403
+
+    session = Login.query.filter_by(
+        token=token
+    ).first()
+
+    if session is None or session.expired < datetime.now():
+        return on_error(
+            api_version=API_VERSION,
+            message="Expired authorization token",
+            code="expired_token"
+        ), 403
 
     return jsonify({"status": "on dev"})
+
+
+@bp.get("/file")
+def file():
+    auth = request.headers.get("authorization", default="undefined undefined")
+    bearer, token = auth.split(" ")
+
+    if bearer.lower() != "bearer":
+        return on_error(
+            api_version=API_VERSION,
+            message="this api requires `Bearer` token",
+            data={
+                "ex": "Authorization: Bearer {YOUR_TOKEN}"
+            },
+            code="required_authorization"
+        ), 403
+
+    session = Login.query.filter_by(
+        token=token
+    ).first()
+
+    if session is None or session.expired < datetime.now():
+        return on_error(
+            api_version=API_VERSION,
+            message="Expired authorization token",
+            code="expired_token"
+        ), 403
+
+    file_id = request.args.get("file_id", None)
+
+    if file_id is None:
+        return on_error(
+            api_version=API_VERSION,
+            message="this api requires `file_id`",
+            data={
+                "ex": "/api/{API_VERSION}/download?file_id={YOUR_FILE_ID}"
+            },
+            code="file_id_missing"
+        ), 400
+
+    file_from_db = File.query.filter_by(
+        uuid=file_id
+    ).first()
+
+    if file_from_db is None:
+        return on_error(
+            api_version=API_VERSION,
+            message="fail to find file in database",
+            code="file_not_found"
+        ), 404
+
+    return on_success(
+        api_version=API_VERSION,
+        data={
+            "file_id": file_from_db.uuid,
+            "filename": file_from_db.name,
+            "hash": {
+                "md5": file_from_db.md5,
+                "sha256": file_from_db.sha256,
+            }
+        }
+    )
