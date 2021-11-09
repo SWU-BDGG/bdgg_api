@@ -94,6 +94,8 @@ def step2_post():
 
     try:
         if User.query.first() is not None:
+            del session['setup_step2']
+            del session['user']
             return "이미 관리자 유저가 생성되어있습니다."
     except ProgrammingError:
         upgrade()
