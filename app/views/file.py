@@ -55,7 +55,21 @@ def index():
 
 @bp.get("/search")
 def search():
-    return "file.search"
+    filename = request.args.get("filename", None)
+
+    if filename is not None and len(filename) >= 2:
+        files = File.query.filter(
+            File.name.ilike(f"%{filename}%")
+        ).order_by(
+            File.date.desc()
+        ).limit(25).all()
+    else:
+        files = []
+
+    return render_template(
+        "file/search.html",
+        files=files
+    )
 
 
 @bp.get("/detail/<string:file_id>")
