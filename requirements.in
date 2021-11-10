@@ -4,6 +4,9 @@ flask-migrate
 
 ua_parser
 
+# for bdgg encrypt module
+pycryptodome
+
 # mysqlclient for production environment
 mysqlclient
 
