@@ -1,3 +1,6 @@
 [submodule "app/templates"]
 	path = app/templates
 	url = https://github.com/SWU-BDGG/html
+[submodule "modules/bdgg"]
+	path = modules/bdgg
+	url = https://github.com/swu-bdgg/bdgg_client
