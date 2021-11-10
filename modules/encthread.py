@@ -5,7 +5,7 @@ from os.path import join
 from uuid import UUID
 
 from threading import Thread, Event
-from queue import Queue
+from queue import Queue, Empty
 
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
@@ -59,7 +59,10 @@ class EncryptorThread(Thread):
 
     def run(self):
         while not self.stop_flag.is_set():
-            encdata, callback = self.queue.get()
+            try:
+                encdata, callback = self.queue.get(True, 1)
+            except Empty:
+                continue
             id_, name, key, iv = encdata
 
             with open(join(self.basepath, f"__{id_}"), "rb") as f:
