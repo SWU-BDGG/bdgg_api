@@ -6,6 +6,7 @@ from flask import render_template
 
 from app.models import File
 from app.models import User
+from app.models import Key
 from app.custom_error import FileIsDeletedOrNotUploaded
 
 
@@ -70,10 +71,15 @@ def detail(file_id: str):
         id=file.owner
     ).first()
 
+    key = Key.query.filter_by(
+        uuid=file.uuid
+    ).first()
+
     return render_template(
         "file/detail.html",
         file=file,
-        upload_user=upload_user
+        upload_user=upload_user,
+        key_status=True if key is not None else False
     )
 
 
