@@ -10,9 +10,11 @@ from flask import url_for
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-from app.config import test_config
+from app.config import test_config, get_config
 from app.secret_key import SECRET_KEY
 from app.database import get_url
+
+from modules.encthread import Encryptor
 
 
 db = SQLAlchemy()
@@ -43,6 +45,10 @@ def create_app():
     __import__("app.models")
     db.init_app(app)
     migrate.init_app(app, db)
+
+    maxthread = get_config("EncThread").maxthread
+    maxthread = 4 if maxthread == "#" else int(maxthread)
+    Encryptor.initialize(maxthread, UPLOAD_DIR)
 
     from . import views
     for view in views.__all__:

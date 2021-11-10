@@ -16,6 +16,8 @@ from app.models import File
 from app.check import check_login
 from app.check import check_filename
 
+from modules.encthread import Encryptor
+
 
 bp = Blueprint(
     name="upload",
@@ -58,6 +60,8 @@ def upload():
         file.md5 = md5(stream).hexdigest()
         file.sha256 = sha256(stream).hexdigest()
         db.session.commit()
+
+    Encryptor.queue_encryption(file.uuid, file.name, print)
 
     return redirect(url_for("upload.wait", file_id=file.uuid))
 

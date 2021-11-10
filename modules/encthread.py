@@ -1,4 +1,4 @@
-from bdgg.bdgg import pack_bdgg
+from modules.bdgg.bdgg import pack_bdgg
 
 from collections import namedtuple
 from os.path import join

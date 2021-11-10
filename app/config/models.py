@@ -6,6 +6,11 @@ Database = namedtuple(
     "host port user password database"
 )
 
+EncThread = namedtuple(
+    "EncThread",
+    "maxthread"
+)
+
 
 ##############################################
 del namedtuple
