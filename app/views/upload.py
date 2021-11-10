@@ -61,11 +61,27 @@ def upload():
         file.sha256 = sha256(stream).hexdigest()
         db.session.commit()
 
-    Encryptor.queue_encryption(file.uuid, file.name, print)
+    Encryptor.queue_encryption(file.uuid, file.name, set_code)
 
-    return redirect(url_for("upload.wait", file_id=file.uuid))
+    return redirect(url_for("file.detail", file_id=file.uuid))
 
 
-@bp.get("/wait/<string:file_id>")
-def wait(file_id: str):
-    return "wait for work"
+def set_code(uuid, key, iv):
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy import create_engine
+
+    from app.database import get_url
+    from app.models import Key
+
+    engine = create_engine(get_url())
+    session = sessionmaker(bind=engine)()
+
+    new_key = Key()
+    new_key.uuid = uuid
+    new_key.key = key.hex()
+    new_key.iv = iv.hex()
+
+    session.add(new_key)
+    session.commit()
+
+    getattr(__import__("os"), "remove")(join(UPLOAD_DIR, "__" + uuid))
