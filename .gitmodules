@@ -4,3 +4,4 @@
 [submodule "modules/bdgg"]
 	path = modules/bdgg
 	url = https://github.com/swu-bdgg/bdgg_client
+	branch = master
