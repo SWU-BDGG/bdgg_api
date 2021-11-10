@@ -81,6 +81,7 @@ def create_app():
                     "/static",
                     "/user/login",
                     "/setup/server-restart",
+                    "/download",
                 ] if request.path.startswith(x)
             ]
 
