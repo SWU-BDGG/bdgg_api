@@ -46,9 +46,9 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    maxthread = get_config("EncThread").maxthread
-    maxthread = 4 if maxthread == "#" else int(maxthread)
-    Encryptor.initialize(maxthread, UPLOAD_DIR)
+    max_thread = get_config("EncThread").maxthread
+    max_thread = 4 if max_thread == "#" else int(max_thread)
+    Encryptor.initialize(max_thread, UPLOAD_DIR)
 
     from . import views
     for view in views.__all__:
