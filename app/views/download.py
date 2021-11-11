@@ -73,4 +73,4 @@ def file(file_id: str):
             api_version=API_VERSION,
             message="cannot access to file",
             code="call_manager_d1"
-        ), 400
+        ), 500
