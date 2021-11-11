@@ -15,6 +15,7 @@ from app import db
 from app.models import User
 from app.models import Login
 from . import dashboard
+from . import password
 
 
 bp = Blueprint(
@@ -23,6 +24,7 @@ bp = Blueprint(
     url_prefix="/user"
 )
 bp.register_blueprint(dashboard.bp)
+bp.register_blueprint(password.bp)
 
 
 @bp.get("")
