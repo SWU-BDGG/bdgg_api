@@ -67,7 +67,7 @@ def file(file_id: str):
             api_version=API_VERSION,
             message="file is not encrypted",
             code="file_is_not_encrypted"
-        ), 403
+        ), 400
     except PermissionError:
         return on_error(
             api_version=API_VERSION,
