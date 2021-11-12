@@ -94,6 +94,7 @@ class EncryptorThread(Thread):
 
     def _bdgg_encode(self, id_, name, data, runnable=None, version=0):
         uuid = UUID(id_)
-        ext = name.rsplit(".", 1)[-1]
+
+        ext = name.rsplit(".", 1)[-1] if "." in name else ""
 
         return pack_bdgg(version, uuid, ext, runnable, data)
