@@ -69,7 +69,7 @@ def login():
                 "expired": ls.expired.isoformat()
             }
         }
-    )
+    ), 201
 
 
 @bp.get("/key")
