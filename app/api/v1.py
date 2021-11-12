@@ -31,6 +31,7 @@ def login():
 
     if email is None or password is None:
         return on_error(
+            api_version=API_VERSION,
             message="email of password is empty",
             code="api_login_fail_empty",
         ), 400
