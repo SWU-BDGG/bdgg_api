@@ -1,13 +1,19 @@
+from os.path import join
 
 from flask import Blueprint
 from flask import request
 from flask import Response
+from flask import redirect
+from flask import url_for
 from flask import render_template
 
+from app import UPLOAD_DIR
+from app import db
 from app.models import File
 from app.models import User
 from app.models import Key
 from app.custom_error import FileIsDeletedOrNotUploaded
+from app.check import check_login
 
 
 bp = Blueprint(
@@ -74,6 +80,11 @@ def search():
 
 @bp.get("/detail/<string:file_id>")
 def detail(file_id: str):
+    user = check_login(bool_instead=True)
+
+    if isinstance(user, dict):
+        return redirect(url_for("user.login"))
+
     file = File.query.filter_by(
         uuid=file_id
     ).first()
@@ -93,7 +104,8 @@ def detail(file_id: str):
         "file/detail.html",
         file=file,
         upload_user=upload_user,
-        key_status=True if key is not None else False
+        key_status=True if key is not None else False,
+        can_delete_able=user.id == upload_user.id or user.is_admin
     )
 
 
@@ -114,3 +126,32 @@ def checksum(file_id: str):
             f"sha256sum {file.sha256}",
         ])
     )
+
+
+@bp.get("/delete/<string:file_id>")
+def delete(file_id: str):
+    user = check_login(bool_instead=True)
+
+    if isinstance(user, dict):
+        return redirect(url_for("user.login"))
+
+    file = File.query.filter_by(
+        uuid=file_id
+    ).first()
+
+    if file is None:
+        raise FileIsDeletedOrNotUploaded
+
+    if file.owner == user.id or user.is_admin:
+        Key.query.filter_by(
+            uuid=file.uuid
+        ).delete()
+
+        db.session.delete(file)
+        db.session.commit()
+
+        getattr(__import__("os"), "remove")(join(UPLOAD_DIR, file.uuid))
+
+        return redirect(url_for("file.index"))
+    else:
+        return redirect(url_for("file.detail", file_id=file_id))
